@@ -330,6 +330,17 @@
   }
   .expense-row .exp-label{flex:1;font-size:13px;color:var(--ink);}
   .expense-row .exp-amount{font-size:13px;font-weight:700;color:var(--mint);white-space:nowrap;}
+  .expense-row .exp-amount.neg{color:var(--coral);}
+  .expense-row .exp-sign{
+    width:34px;height:34px;flex-shrink:0;
+    border-radius:8px;
+    border:1px solid rgba(255,227,107,0.6);
+    background:#04132B;color:var(--lantern);
+    font-size:15px;font-weight:700;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .expense-row .exp-sign.neg{border-color:var(--coral);color:var(--coral);}
+  .expense-row input[type="number"].neg{color:var(--coral);}
   .expense-row input[type="text"]{
     flex:1;min-width:0;
     border:1px solid rgba(60,240,255,0.35);
@@ -844,7 +855,7 @@
     <div class="expense-edit-controls" id="expense-edit-controls" style="display:none;">
       <button id="expense-add-btn">＋ 費目を追加</button>
     </div>
-    <div class="expense-hint">金額は税込で入力してください。<br>1人あたりは6人で割った金額です。</div>
+    <div class="expense-hint">金額は税込で入力してください。<br>繰越金などのマイナスは「±」で切り替えできます。<br>1人あたりは6人で割った金額です。</div>
   </section>
 
 </div>
@@ -967,7 +978,8 @@
         list.innerHTML = expenses.map((e,i) => `
           <div class="expense-row">
             <input type="text" value="${(e.label||'').replace(/"/g,'&quot;')}" data-idx="${i}" data-field="label" placeholder="費目名（例：高速代）">
-            <input type="number" value="${e.amount||0}" data-idx="${i}" data-field="amount" placeholder="0" inputmode="numeric">
+            <button class="exp-sign${Number(e.amount) < 0 ? ' neg' : ''}" data-idx="${i}" aria-label="プラスマイナス切替">±</button>
+            <input type="number" class="${Number(e.amount) < 0 ? 'neg' : ''}" value="${e.amount||0}" data-idx="${i}" data-field="amount" placeholder="0" inputmode="numeric">
             <button class="exp-del" data-idx="${i}" aria-label="削除">✕</button>
           </div>
         `).join('');
@@ -986,7 +998,7 @@
         list.innerHTML = expenses.map(e => `
           <div class="expense-row">
             <div class="exp-label">${e.label || '(名称未設定)'}</div>
-            <div class="exp-amount">${yen(e.amount)}</div>
+            <div class="exp-amount${Number(e.amount) < 0 ? ' neg' : ''}">${yen(e.amount)}</div>
           </div>
         `).join('');
       }
@@ -999,6 +1011,12 @@
     const field = ev.target.dataset.field;
     if(!expenses[idx]) return;
     expenses[idx][field] = field === 'amount' ? Number(ev.target.value) : ev.target.value;
+    if(field === 'amount'){
+      const neg = expenses[idx].amount < 0;
+      ev.target.classList.toggle('neg', neg);
+      const signBtn = document.querySelector(`#expense-list .exp-sign[data-idx="${idx}"]`);
+      if(signBtn) signBtn.classList.toggle('neg', neg);
+    }
     updateExpenseTotalsOnly();
   });
 
@@ -1007,6 +1025,26 @@
     const idx = Number(ev.target.dataset.idx);
     const item = expenses[idx];
     if(!item || !item.id) return; // 追加処理がまだ完了していない行はスキップ
+    setExpenseStatus('保存中…');
+    await apiCall('update', { id:item.id, label:item.label, amount:item.amount });
+    setExpenseStatus('');
+  });
+
+  // ± ボタン：テンキーでマイナスが打てないため符号を反転して保存
+  document.getElementById('expense-list').addEventListener('click', async (ev) => {
+    if(!ev.target.classList.contains('exp-sign')) return;
+    const idx = Number(ev.target.dataset.idx);
+    const item = expenses[idx];
+    if(!item) return;
+    item.amount = -(Number(item.amount) || 0);
+    const input = document.querySelector(`#expense-list input[data-field="amount"][data-idx="${idx}"]`);
+    if(input){
+      input.value = item.amount;
+      input.classList.toggle('neg', item.amount < 0);
+    }
+    ev.target.classList.toggle('neg', item.amount < 0);
+    updateExpenseTotalsOnly();
+    if(!item.id) return; // 追加処理がまだ完了していない行はスキップ
     setExpenseStatus('保存中…');
     await apiCall('update', { id:item.id, label:item.label, amount:item.amount });
     setExpenseStatus('');
