@@ -236,6 +236,17 @@
   .menu-card:nth-of-type(2){--card-color:#FF6B8B; box-shadow:0 0 16px rgba(255,107,139,0.28), var(--shadow);}
   .menu-card:nth-of-type(3){--card-color:#FFE36B; box-shadow:0 0 16px rgba(255,227,107,0.28), var(--shadow);}
   .menu-card:nth-of-type(4){--card-color:#5CFFC8; box-shadow:0 0 16px rgba(92,255,200,0.28), var(--shadow);}
+  .menu-card.menu-card-wide{
+    grid-column:1 / -1;
+    flex-direction:row;
+    align-items:center;
+    gap:14px;
+    text-decoration:none;
+    --card-color:#C08CFF;
+    box-shadow:0 0 16px rgba(192,140,255,0.28), var(--shadow);
+  }
+  .menu-wide-text{flex:1;display:flex;flex-direction:column;gap:4px;}
+  .menu-wide-arrow{font-size:18px;color:#C08CFF;}
   .menu-card:active{transform:scale(.97);}
   .menu-card .icon{font-size:26px;}
   .menu-card .ttl{font-family:'Hachi Maru Pop',cursive;font-weight:400;font-size:16px;color:#fff;text-shadow:0 0 4px #fff, 0 0 11px var(--card-color, #3CF0FF), 0 0 20px var(--card-color, #3CF0FF), 0 0 38px var(--card-color, #3CF0FF);}
@@ -799,10 +810,18 @@
         <div class="ttl">持ち物・服装</div>
         <div class="desc">1泊＋海辺のBBQに備えて</div>
       </button>
+      <a class="menu-card menu-card-wide" href="https://crane-hooklab.com" target="_blank" rel="noopener">
+        <div class="icon">🎮</div>
+        <div class="menu-wide-text">
+          <div class="ttl">ミニゲーム</div>
+          <div class="desc">移動中のひまつぶしに</div>
+        </div>
+        <div class="menu-wide-arrow">↗</div>
+      </a>
     </div>
 
     <div class="note-block">
-      <b>メモ：</b>1日目は調布駅・亀有駅で2人ずつピックアップ → 大洗海鮮市場でお昼 → 民泊あまねにチェックイン → 那珂湊おさかな市場で買い出しして海鮮BBQ。2日目は14:00開演のライブを多賀市民会館でみんなで観る予定。
+      <b>メモ：</b>1日目は調布駅・亀有駅で2人ずつピックアップ → 大洗海鮮市場でお昼 → 湊の宿 あまねにチェックイン → 那珂湊おさかな市場で買い出しして海鮮BBQ。2日目は14:00開演のライブを多賀市民会館でみんなで観る予定。
     </div>
   </section>
 
@@ -1103,6 +1122,7 @@
   // ---------------- Data ----------------
   const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
   const AMANE_URL = 'https://maps.app.goo.gl/PZnMtJoeiCBjP3VS6?g_st=ic';
+  const AMANE_BOOKING_URL = 'https://www.booking.com/hotel/jp/cou-nosu-amane-hitatinakashi.ja.html';
 
   const timelineData = {
     1: [
@@ -1115,13 +1135,13 @@
       {t:"11:00", r:"13:00", title:"昼食・お買い物", icon:"🍣", cat:"food"},
       {t:"13:00", r:"14:30", title:"大洗周辺を観光・散策", icon:"🌊", cat:"sea", sub:"時間に余裕があれば"},
       {t:"14:30", r:"14:50", title:"大洗 → 那珂湊の民泊へ移動", icon:"🚗", cat:"transit"},
-      {t:"15:00", title:"民泊あまね チェックイン", icon:"🏡", cat:"home"},
+      {t:"15:00", title:"湊の宿 あまね チェックイン", icon:"🏡", cat:"home"},
       {t:"15:00", r:"16:00", title:"那珂湊おさかな市場でBBQ材料の買い出し", icon:"🦀", cat:"food"},
       {t:"16:00", r:"16:30", title:"民泊へ戻ってBBQ準備", icon:"🧺", cat:"home"},
       {t:"16:30", r:"", title:"BBQスタート！", icon:"🔥", cat:"bbq", open:true},
     ],
     2: [
-      {t:"朝", title:"民泊あまね チェックアウト", icon:"🏡", cat:"home", sub:"チェックアウト時刻は要確認"},
+      {t:"朝", title:"湊の宿 あまね チェックアウト", icon:"🏡", cat:"home", sub:"チェックアウト時刻は要確認"},
       {t:"午前", title:"調整中", icon:"❔", cat:"home", tbd:true, sub:"ライブのリハ等があるため未定"},
       {t:"〜13:00", title:"多賀市民会館へ移動", icon:"🚗", cat:"transit", sub:"日立市千石町2-4-20／有料駐車場あり"},
       {t:"13:00", title:"開場", icon:"🎫", cat:"live"},
@@ -1140,13 +1160,13 @@
       name:"那珂湊おさかな市場", emoji:"🦀", time:"1日目 15:00〜16:00頃",
       desc:"那珂湊漁港沿いに鮮魚店や食事処が軒を連ねる市場。BBQ用の魚介はここでまとめて買い出し。",
       info:"<b>住所</b> 茨城県ひたちなか市湊本町19-8<br><b>営業</b> 店舗ごとに異なる<br><b>駐車場</b> 250台（普通車 4時間100円）",
-      url:gmap("那珂湊おさかな市場")
+      url:"https://www.nakaminato-osakanaichiba.jp"
     },
     {
-      name:"民泊 あまね", emoji:"🏡", time:"1日目 15:00 チェックイン",
+      name:"湊の宿 あまね", emoji:"🏡", time:"1日目 15:00 チェックイン",
       desc:"今回の宿。おさかな市場で買った魚介で海鮮BBQ。",
       info:"<b>チェックイン</b> 15:00<br><b>チェックアウト</b> 要確認",
-      url:AMANE_URL
+      url:AMANE_BOOKING_URL
     },
     {
       name:"多賀市民会館 ホール", emoji:"🎤", time:"2日目 13:00開場／14:00開演",
@@ -1267,7 +1287,7 @@
     row.className = 'legend-row';
     row.innerHTML = `
       <div class="legend-num stay">宿</div>
-      <div class="legend-label">🏡 民泊 あまね</div>
+      <div class="legend-label">🏡 湊の宿 あまね</div>
       <a class="legend-btn legend-detail" href="${AMANE_URL}" target="_blank" rel="noopener">Googleマップ</a>
     `;
     legend.appendChild(row);
