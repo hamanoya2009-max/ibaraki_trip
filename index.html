@@ -845,7 +845,7 @@
 
   <!-- ============ SPOTS ============ -->
   <section class="screen" id="screen-spots">
-    <div class="topbar"><h2>立ち寄り先</h2><div class="cnt">4スポット</div></div>
+    <div class="topbar"><h2>立ち寄り先</h2><div class="cnt">5スポット</div></div>
     <div class="spots" id="spots-list"></div>
   </section>
 
@@ -1146,7 +1146,8 @@
       {t:"09:00", title:"湊の宿 あまね チェックアウト・出発", icon:"🏡", cat:"home"},
       {t:"09:00", r:"10:30", title:"多賀市民会館へ移動", icon:"🚗", cat:"transit", sub:"日立市千石町2-4-20／有料駐車場あり"},
       {t:"10:30", title:"リハ入り", icon:"🎸", cat:"live"},
-      {t:"10:30", r:"13:00", title:"調整中", icon:"❔", cat:"home", tbd:true, sub:"リハ中の過ごし方は未定"},
+      {t:"11:00", r:"", title:"海鮮茶屋 濱膳で食事（リハ以外のメンバー）", icon:"🍱", cat:"food", open:true, sub:"道の駅 日立おさかなセンター 2F／11:00開店"},
+      {t:"〜13:00", title:"多賀市民会館へ戻る", icon:"🚗", cat:"transit"},
       {t:"13:00", title:"開場", icon:"🎫", cat:"live"},
       {t:"14:00", title:"ライブ開演！", icon:"🎤", cat:"live"},
     ]
@@ -1177,6 +1178,12 @@
       info:"<b>住所</b> 茨城県日立市千石町2-4-20<br><b>アクセス</b> 常磐道「日立南太田IC」から車20分<br><b>駐車場</b> 有料（1時間無料、以降30分100円）",
       url:"https://www.civic.jp"
     },
+    {
+      name:"海鮮茶屋 濱膳", emoji:"🍱", time:"2日目 11:00〜 リハ中の食事",
+      desc:"道の駅 日立おさかなセンターの2階にある海鮮の食事処。リハ以外のメンバーはここでお昼。",
+      info:"<b>住所</b> 茨城県日立市みなと町5779-24 日立おさかなセンター2階<br><b>営業</b> 土日祝 11:00〜20:30（L.O. 20:00）<br><b>駐車場</b> 道の駅の無料駐車場",
+      url:"https://aster-kk.co.jp/hamazen/"
+    },
   ];
 
   // day: 1=1日目ルート, 2=2日目, stay=宿（ピンなし・リンクのみ）
@@ -1186,6 +1193,7 @@
     {name:"大洗海鮮市場", emoji:"🐟", lat:36.3117, lng:140.5808, url:gmap("大洗海鮮市場"), day:1},
     {name:"那珂湊おさかな市場", emoji:"🦀", lat:36.3399, lng:140.5946, url:gmap("那珂湊おさかな市場"), day:1},
     {name:"多賀市民会館（ライブ）", emoji:"🎤", lat:36.5410, lng:140.6460, url:gmap("多賀市民会館 日立市千石町2-4-20"), day:2},
+    {name:"濱膳（日立おさかなセンター）", emoji:"🍱", lat:36.4975, lng:140.6230, url:gmap("道の駅 日立おさかなセンター"), day:2},
   ];
 
   // ---------------- Render: timeline ----------------
