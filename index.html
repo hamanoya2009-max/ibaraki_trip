@@ -1386,6 +1386,31 @@
   document.querySelectorAll('[data-goto]').forEach(el => {
     el.addEventListener('click', () => goto(el.dataset.goto));
   });
+
+  // ---------------- 最新版チェック ----------------
+  // 更新をプッシュするときは APP_VERSION と version.json の version を同じ値に上げる
+  const APP_VERSION = '2026112101';
+  async function checkLatestVersion(){
+    if(expenseEditMode) return; // 使用金額の編集中は再読み込みしない
+    try{
+      const res = await fetch('version.json?t=' + Date.now(), {cache:'no-store'});
+      if(!res.ok) return;
+      const data = await res.json();
+      if(!data.version || data.version === APP_VERSION) return;
+      // 配信側の反映待ちで古い版が返ってきても、再読み込みを繰り返さないようにする（60秒に1回まで）
+      let last = 0;
+      try{ last = Number(sessionStorage.getItem('lastVersionReload')) || 0; }catch(e){}
+      if(Date.now() - last < 60000) return;
+      try{ sessionStorage.setItem('lastVersionReload', String(Date.now())); }catch(e){}
+      location.replace(location.pathname + '?v=' + encodeURIComponent(data.version) + location.hash);
+    }catch(e){
+      // 圏外などで確認できないときはそのまま表示
+    }
+  }
+  checkLatestVersion();
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible') checkLatestVersion();
+  });
 </script>
 </body>
 </html>
